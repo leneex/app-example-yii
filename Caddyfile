@@ -1,0 +1,29 @@
+# FrankenPHP config. Railpack uses this file instead of its built-in one.
+{
+	admin off
+	persist_config off
+	auto_https off
+
+	log {
+		format json
+		output stderr
+		level INFO
+	}
+
+	frankenphp
+}
+
+:{$PORT:80} {
+	root * /app/web
+
+	encode zstd br gzip
+
+	# Never serve files or folders whose names start with a dot, except /.well-known/
+	@hidden {
+		path */.*
+		not path /.well-known/*
+	}
+	respond @hidden 404
+
+	php_server
+}
